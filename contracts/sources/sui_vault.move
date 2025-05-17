@@ -72,16 +72,6 @@ module sui_vault::sui_vault {
         has_access(registry, file_id, uploader);
     }
 
-    public entry fun trial_run(registry: &mut FileRegistry, file_id: ID, user: address, clock: &Clock, ctx: &mut TxContext) {
-        log_download(registry, file_id, clock, ctx); // Remove this statement later, using for testing only.
-        revoke_access(registry, file_id, user);
-    }
-
-    public entry fun check_access_trial(registry: &FileRegistry, file_id: ID, ctx: &mut TxContext) {
-        let user = tx_context::sender(ctx);
-        has_access(registry, file_id, user);
-    }
-
 
     public fun has_access(
         registry: &FileRegistry,
@@ -115,6 +105,37 @@ module sui_vault::sui_vault {
                 table::remove(access_list, user);
             }
         }
+    }
+
+    public fun list_user_files(registry: &FileRegistry, user: address): (vector<ID>, vector<ID>) {
+        let mut owned = vector::empty<ID>();
+        let mut accessible = vector::empty<ID>();
+        
+        if (table::contains(&registry.files_by_user, user)) {
+            let user_files = table::borrow(&registry.files_by_user, user);
+            let len = vector::length(user_files);
+            let mut i = 0;
+
+            while (i < len) {
+                let file_id = *vector::borrow(user_files, i);
+                let file = table::borrow(&registry.files, file_id);
+
+                if(file.uploader == user) {
+                    vector::push_back(&mut owned, file_id);
+                } else if (table::contains(&registry.access_lists, file_id)) {
+                    let access_table = table::borrow(&registry.access_lists, file_id);
+                    if (table::contains(access_table, user)) {
+                        let has_access = *table::borrow(access_table, user);
+                        if (has_access) {
+                            vector::push_back(&mut accessible, file_id);
+                        }
+                    }
+                };
+
+                i = i + 1;
+            }
+        };
+        (owned, accessible)
     }
 
     public fun log_download(

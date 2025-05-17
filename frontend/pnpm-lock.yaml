@@ -26,9 +26,6 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.71.3
         version: 5.76.1(react@18.3.1)
-      dotenv:
-        specifier: ^16.5.0
-        version: 16.5.0
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -1512,10 +1509,6 @@ packages:
 
   detect-node-es@1.1.0:
     resolution: {integrity: sha512-ypdmJU/TbBby2Dxibuv7ZLW3Bs1QEmM7nHjEANfohJLvE0XVujisn1qPJcZxg+qDucsr+bP6fLD1rPS3AhJ7EQ==}
-
-  dotenv@16.5.0:
-    resolution: {integrity: sha512-m/C+AwOAr9/W1UOIZUo232ejMNnJAJtYQjUbHoNTBNTJSvqzzDh7vnrei3o3r3m9blf6ZoDkvcw0VmozNRFJxg==}
-    engines: {node: '>=12'}
 
   esbuild@0.25.4:
     resolution: {integrity: sha512-8pgjLUcUjcgDg+2Q4NYXnPbo/vncAY4UmyaCm0jZevERqCHZIaWwdJHkf8XQtu4AxSKCdvrUbT0XUr1IdZzI8Q==}
@@ -3463,8 +3456,6 @@ snapshots:
   deepmerge@4.3.1: {}
 
   detect-node-es@1.1.0: {}
-
-  dotenv@16.5.0: {}
 
   esbuild@0.25.4:
     optionalDependencies:
