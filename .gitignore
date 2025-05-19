@@ -1,3 +1,4 @@
 contracts/build/*
 frontend/.env
 frontend/node_modules
+scripts/upload.html

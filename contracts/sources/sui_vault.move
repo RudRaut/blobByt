@@ -45,10 +45,10 @@ module sui_vault::sui_vault {
     }
 
     // File Upload
-    public entry fun upload_file(registry: &mut FileRegistry, blob_id: address, clock: &Clock, ctx: &mut TxContext) {
+    public entry fun upload_file(registry: &mut FileRegistry, file_id: ID, blob_id: address, clock: &Clock, ctx: &mut TxContext) {
         let uploader = tx_context::sender(ctx);
-        let file_id_addr = tx_context::fresh_object_address(ctx);
-        let file_id =  object::id_from_address(file_id_addr);
+        // let file_id_addr = tx_context::fresh_object_address(ctx);
+        // let file_id =  object::id_from_address(file_id_addr);
         let timestamp = clock.timestamp_ms();
         let access_list = table::new<address, bool>(ctx);
         table::add(&mut registry.access_lists, file_id, access_list);

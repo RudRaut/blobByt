@@ -307,6 +307,20 @@ func main() {
 	http.HandleFunc("/upload", UploadHandler)
 	http.HandleFunc("/download", DownloadHandler)
 
+	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+		// CORS headers
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+		if r.Method == http.MethodOptions {
+			return
+		}
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("OK"))
+	})
+
 	fmt.Println("Server Started on http://localhost:8080")
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
