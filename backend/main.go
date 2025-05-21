@@ -1,11 +1,15 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
+	"example.com/trial1/db"
 	"example.com/trial1/handlers"
+	"github.com/joho/godotenv"
 )
 
 /*
@@ -19,6 +23,24 @@ walrus publisher   --bind-address "127.0.0.1:31416"   --sub-wallets-dir "/home/r
 */
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
+	uri := os.Getenv("URI")
+	// uri := "REMOVED"
+
+	err = db.Connect(uri)
+	if err != nil {
+		log.Fatalf("Failed to connect to MongoDB: %v", err)
+	}
+	defer func() {
+		if err := db.Client.Disconnect(context.Background()); err != nil {
+			log.Fatalf("Failed to disconnect MongoDB client: %v", err)
+		}
+	}()
+
 	http.HandleFunc("/upload", handlers.UploadHandler)
 	http.HandleFunc("/download", handlers.DownloadHandler)
 	http.HandleFunc("/health", handlers.HealthHandler)

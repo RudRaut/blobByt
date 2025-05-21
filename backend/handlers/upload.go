@@ -12,6 +12,7 @@ import (
 	"path/filepath"
 	"strconv"
 
+	"example.com/trial1/db"
 	"example.com/trial1/services"
 )
 
@@ -85,6 +86,21 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Encode the encryption key to Base64 for the response
 	encodedKey := base64.StdEncoding.EncodeToString(key)
+
+	metadata := db.FileMetadata{
+		BlobID:        blobID,
+		Name:          handler.Filename,
+		Size:          handler.Size,
+		FileType:      handler.Header.Get("Content-Type"),
+		EncryptionKey: encodedKey, // base64 string
+		Epochs:        epochs,
+		Description:   r.FormValue("description"), // optional from client form
+	}
+
+	if err := db.InsertFileMetadata(metadata); err != nil {
+		log.Println("Failed to save file metadata:", err)
+		// Decide: return error or continue
+	}
 
 	// Respond with JSON containing the blobID and encoded encryption key
 	err = json.NewEncoder(w).Encode(map[string]string{
