@@ -5,7 +5,7 @@ const GITHUB_URL = 'https://github.com/RudRaut'; // <-- Replace with your actual
 
 const Navbar: React.FC = () => (
   <nav className="w-full flex items-center justify-between py-3 px-4">
-    <span className="text-xl font-bold text-[#37454d]">Sui Vault</span>
+    <span className="text-xl font-bold text-[#37454d]">Walrus File Storage</span>
     <a
       href={GITHUB_URL}
       target="_blank"
