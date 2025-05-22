@@ -46,6 +46,7 @@ const Upload: React.FC = () => {
     formData.append('description', description);
 
     try {
+      toast.success("Uploading File")
       const res = await fetch('http://localhost:8080/upload', {
         method: 'POST',
         body: formData,
