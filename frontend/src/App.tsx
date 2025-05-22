@@ -1,45 +1,20 @@
-import { ConnectButton } from "@mysten/dapp-kit";
-import { Box, Container, Flex, Heading } from "@radix-ui/themes";
-// import { WalletStatus } from "./WalletStatus";
-import { Toaster } from "react-hot-toast";
-import FileUpload from "./pages/FileUpload"; // Adjust the import path
+import './App.css'
+
+import { Toaster } from 'react-hot-toast'
+import Upload from './components/Upload'
+import Download from './components/Download'
+import StoredFilesList from './components/StoredFilesList'
 
 function App() {
+
   return (
     <>
-      <Flex
-        position="sticky"
-        px="4"
-        py="2"
-        justify="between"
-        style={{
-          borderBottom: "1px solid var(--gray-a2)",
-        }}
-      >
-        <Box>
-          <Heading>dApp Starter Template</Heading>
-        </Box>
-
-        <Box>
-          <ConnectButton />
-        </Box>
-      </Flex>
-
-      <Container>
-        <Container
-          mt="5"
-          pt="2"
-          px="4"
-          style={{ background: "var(--gray-a2)", minHeight: 500 }}
-        >
-          <Box mt="6">
-            <Toaster /> 
-            <FileUpload />
-          </Box>
-        </Container>
-      </Container>
+      <Upload />
+      <Toaster />
+      <Download />
+      <StoredFilesList />
     </>
-  );
+  )
 }
 
-export default App;
+export default App

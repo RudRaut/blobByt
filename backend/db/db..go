@@ -13,15 +13,15 @@ import (
 
 // FileMetadata holds metadata info about uploaded files.
 type FileMetadata struct {
-	ID            string    `bson:"_id,omitempty"`
-	BlobID        string    `bson:"blobID"`
-	Name          string    `bson:"name"`
-	Size          int64     `bson:"size"`
-	FileType      string    `bson:"fileType"`
-	EncryptionKey string    `bson:"encryptionKey"`
-	Epochs        int       `bson:"epochs"`
-	Description   string    `bson:"description,omitempty"`
-	UploadTime    time.Time `bson:"uploadTime"`
+	ID            string    `bson:"_id,omitempty" json: "_id"`
+	BlobID        string    `bson:"blobID" json:"blobID"`
+	Name          string    `bson:"name" json:"name"`
+	Size          int64     `bson:"size" json:"size"`
+	FileType      string    `bson:"fileType" json:"fileType"`
+	EncryptionKey string    `bson:"encryptionKey" json:"encryptionKey"`
+	Epochs        int       `bson:"epochs" json:"epochs"`
+	Description   string    `bson:"description,omitempty" json:"description,omitempty"`
+	UploadTime    time.Time `bson:"uploadTime" json:"uploadTime"`
 }
 
 // Client is a package-level MongoDB client accessible to all DB functions.
@@ -90,4 +90,26 @@ func GetMetadataByBlobID(blobID string) (*FileMetadata, error) {
 	}
 
 	return &metadata, nil
+}
+
+func GetAllFiles() ([]FileMetadata, error) {
+	if Client == nil {
+		return nil, fmt.Errorf("mongo client not initialized")
+	}
+
+	collection := Client.Database("walrus").Collection("files")
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	cursor, err := collection.Find(ctx, bson.M{})
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(ctx)
+
+	var files []FileMetadata
+	if err = cursor.All(ctx, &files); err != nil {
+		return nil, err
+	}
+	return files, nil
 }

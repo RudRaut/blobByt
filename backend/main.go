@@ -29,7 +29,6 @@ func main() {
 	}
 
 	uri := os.Getenv("URI")
-	// uri := "REMOVED"
 
 	err = db.Connect(uri)
 	if err != nil {
@@ -44,6 +43,7 @@ func main() {
 	http.HandleFunc("/upload", handlers.UploadHandler)
 	http.HandleFunc("/download", handlers.DownloadHandler)
 	http.HandleFunc("/health", handlers.HealthHandler)
+	http.HandleFunc("/files", handlers.ListFilesHandler)
 
 	fmt.Println("Server Started on http://localhost:8080")
 	if err := http.ListenAndServe(":8080", nil); err != nil {
